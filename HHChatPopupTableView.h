@@ -15,6 +15,8 @@ typedef void(^indexCallBack)(NSIndexPath *index);
 -(instancetype)initWithFrame:(CGRect)frame titleArray:(NSArray*)titleArray;
 -(Boolean)hideView;
 -(Boolean)showView;
+
+@property (assign,nonatomic) CGFloat cellHeight;
 @property (copy,nonatomic) NSArray *titleArray;
 @property (assign,nonatomic) NSInteger indexValue;
 @property (copy,nonatomic) indexCallBack tableViewCallBack;

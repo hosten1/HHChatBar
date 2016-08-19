@@ -14,9 +14,13 @@
 @property(nonatomic,strong)UIView *rightView;
 @property(nonatomic,assign)NSInteger oldBtnTargt;
 @property(nonatomic,strong)HHChatPopupTableView *oldPopView;
+@property(nonatomic,copy)NSArray *sourcesArray;
 @property (assign,nonatomic) bool Hiddent;
+@property (assign,nonatomic) NSInteger count;
 #define kScreenSize [UIScreen mainScreen].bounds.size
-#define KViewHeight 35
+#define KViewHeight 35.0f
+#define KCellHeight 30.0f
+#define WEAKSELF __weak __typeof(&*self)weakSelf = self;
 @end
 
 @implementation HHChatBarView
@@ -24,11 +28,14 @@
     if (self == [super init]) {
         self.frame = CGRectMake(0,kScreenSize.height-KViewHeight,kScreenSize.width,KViewHeight);
         self.backgroundColor = [UIColor colorWithRed:0.927 green:0.937 blue:0.907 alpha:1.000];
+        self.resourseDictionary = resourcesDic;
         [self initRightBarButton];
-        [self setupSubviewItems];
-        
     }
     return self;
+}
+-(void)setResourseDictionary:(NSDictionary *)resourseDictionary{
+    _resourseDictionary = resourseDictionary;
+    self.sourcesArray = resourseDictionary[@"menu"];
 }
 -(void)initRightBarButton{
     UIView *rightView = [[UIView alloc]initWithFrame:CGRectMake(0, 1, 40, KViewHeight-1)];
@@ -45,15 +52,29 @@
     right.backgroundColor = [UIColor colorWithRed:0.982 green:0.972 blue:0.952 alpha:1.000];
 }
 -(void)setupSubviewItems{
-    NSInteger count = 4;
+    NSInteger count;
+    if (self.ChatDelegate && [self.ChatDelegate respondsToSelector:@selector(numberOfSectionWithchatBar:)]) {
+         count = [self.ChatDelegate  numberOfSectionWithchatBar:self];
+    }
+    if (!count) {
+        count = 1;
+    }
+    self.count = count;
     CGFloat margin = 2;
     CGFloat rightX = self.rightView.frame.size.width;
     CGFloat itemWidth = (kScreenSize.width-rightX- margin*(count-1))/count;
     CGFloat itemY = 1;
     UIButton *item ;
     for (NSInteger i = 0; i < count; i++) {
+        NSString *title;
+        if (self.ChatDelegate && [self.ChatDelegate respondsToSelector:@selector(chatBar:sectionTitleWithIndexPath:)]) {
+            title = [self.ChatDelegate  chatBar:self sectionTitleWithIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
+        }
+        if (!title) {
+            title = @"帮助";
+        }
         item = [UIButton buttonWithType:UIButtonTypeCustom];
-        [item setTitle:@"测试" forState:UIControlStateNormal];
+        [item setTitle:title forState:UIControlStateNormal];
         [item setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
         [self addSubview:item];
         CGFloat itemX = rightX+ margin + i * (itemWidth + margin);
@@ -64,53 +85,77 @@
     }
 }
 -(void)btnClick:(UIButton*)sender{
-    NSInteger i = sender.tag - 2016819;
-    CGFloat height = 30*3;
-    NSInteger cout = 4;
+    
+    NSInteger section = sender.tag - 2016819;
+    NSArray *titileArray;
+    if (self.ChatDelegate && [self.ChatDelegate respondsToSelector:@selector(chatBar:subPopViewTitleOfRowWithIndexPath:)]) {
+        titileArray = [self.ChatDelegate  chatBar:self subPopViewTitleOfRowWithIndexPath:[NSIndexPath indexPathForRow:0 inSection:section]];
+    }
+    if (!titileArray) {
+        return;
+    }
+    NSInteger subCount = titileArray.count;
+    CGFloat height = KCellHeight*subCount;
+
     CGFloat width;
-    if (cout > 3) {
+    if (self.count > 3 || self.count == 1) {
         width = 100;
     }else{
          width = sender.frame.size.width-10;
     }
-    CGFloat x = sender.frame.origin.x+2;
+    CGFloat x;
+    if (self.count == 4||self.count == 5||self.count == 6) {
+        x = sender.frame.origin.x+2-30;
+    }else{
+        x = sender.frame.origin.x+2;
+    }
     CGFloat y = kScreenSize.height-sender.frame.size.height-10 - height;
     HHChatPopupTableView *popView;
+   WEAKSELF
     if (self.oldPopView) {
-        if (self.oldBtnTargt != i) {
+        if (self.oldBtnTargt != section) {
            [self.oldPopView hideView];
            [self.oldPopView removeFromSuperview];
-            popView = [[HHChatPopupTableView alloc]initWithFrame:CGRectMake(x,y,width , height) titleArray:@[]];
+            popView = [[HHChatPopupTableView alloc]initWithFrame:CGRectMake(x,y,width,KCellHeight) titleArray:titileArray];
             self.oldPopView = popView;
-            popView.indexValue = i;
-            self.oldBtnTargt = i;
+            popView.indexValue = section;
+            self.oldBtnTargt = section;
             self.Hiddent = NO;
             [self.superview addSubview:popView];
             popView.tableViewCallBack = ^(NSIndexPath *index){
-                 NSLog(@"sss  %ld  section:%ld",index.row,index.section);
+//                 NSLog(@"sss  %ld  section:%ld",index.row,index.section);
+                if (weakSelf.ChatDelegate && [weakSelf.ChatDelegate respondsToSelector:@selector(chatBar:didSelectIndex:)]) {
+                    [weakSelf.ChatDelegate chatBar:weakSelf didSelectIndex:index];
+                }
             };
         }else{
             if (!self.Hiddent) {
                self.Hiddent = [self.oldPopView hideView];
             }else{
                 [self.oldPopView showView];
-                self.oldPopView.indexValue = i;
+                self.oldPopView.indexValue = section;
                 self.oldPopView.tableViewCallBack = ^(NSIndexPath *index){
-                     NSLog(@"aaa  %ld  section:%ld",index.row,index.section);
+//                     NSLog(@"aaa  %ld  section:%ld",index.row,index.section);
+                    if (weakSelf.ChatDelegate && [weakSelf.ChatDelegate respondsToSelector:@selector(chatBar:didSelectIndex:)]) {
+                        [weakSelf.ChatDelegate chatBar:weakSelf didSelectIndex:index];
+                    }
                 };
                 self.Hiddent = NO;
             }
             
         }
     }else{
-        popView = [[HHChatPopupTableView alloc]initWithFrame:CGRectMake(x,y,width , height) titleArray:@[]];
+        popView = [[HHChatPopupTableView alloc]initWithFrame:CGRectMake(x,y,width ,KCellHeight) titleArray:titileArray];
         self.oldPopView = popView;
-        popView.indexValue = i;
-        self.oldBtnTargt = i;
+        popView.indexValue = section;
+        self.oldBtnTargt = section;
         self.Hiddent = NO;
         [self.superview addSubview:popView];
         popView.tableViewCallBack = ^(NSIndexPath *index){
-            NSLog(@"ddd  %ld  section:%ld",index.row,index.section);
+//            NSLog(@"ddd  %ld  section:%ld",index.row,index.section);
+            if (weakSelf.ChatDelegate && [weakSelf.ChatDelegate respondsToSelector:@selector(chatBar:didSelectIndex:)]) {
+                [weakSelf.ChatDelegate chatBar:weakSelf didSelectIndex:index];
+            }
         };
     }
     

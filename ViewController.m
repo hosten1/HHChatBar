@@ -42,6 +42,10 @@
 -(void)chatBar:(HHChatBarView *)charBar didSelectIndex:(NSIndexPath *)indexPath{
     NSLog(@"section::%ld,row:::%ld",indexPath.section,indexPath.row);
 }
+
+-(void)chatBar:(HHChatBarView *)charBar didClickRithtButton:(UIButton *)sender{
+    NSLog(@"");
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 

@@ -16,6 +16,7 @@
 -(NSArray*)chatBar:(HHChatBarView *)charBar subPopViewTitleOfRowWithIndexPath:(NSIndexPath*)indexPath;
 @optional
 -(void)chatBar:(HHChatBarView*)charBar didSelectIndex:(NSIndexPath*)indexPath;
+-(void)chatBar:(HHChatBarView*)charBar didClickRithtButton:(UIButton*)sender;
 
 @end
 

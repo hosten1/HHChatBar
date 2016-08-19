@@ -47,6 +47,7 @@
     [_rightBtn setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
     [_rightBtn setBackgroundImage:[UIImage imageNamed:@"block"] forState:UIControlStateNormal];
     [_rightBtn setBackgroundImage:[UIImage imageNamed:@"white"] forState:UIControlStateHighlighted];
+    [self.rightBtn addTarget:self action:@selector(rightBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     right.frame = CGRectMake(0,0, 20, 20);
     right.center = rightView.center;
     right.backgroundColor = [UIColor colorWithRed:0.982 green:0.972 blue:0.952 alpha:1.000];
@@ -159,5 +160,15 @@
         };
     }
     
+}
+
+
+-(void)rightBtnClick:(UIButton*)sender{
+    if (self.oldPopView) {
+        [self.oldPopView hideView];
+    }
+    if (self.ChatDelegate && [self.ChatDelegate respondsToSelector:@selector(chatBar:didClickRithtButton:)]) {
+        [self.ChatDelegate chatBar:self didClickRithtButton:sender];
+    }
 }
 @end

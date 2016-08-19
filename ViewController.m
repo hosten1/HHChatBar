@@ -20,7 +20,7 @@
     NSDictionary *dic = @{@"menu":@[@{@"name":@"haha",@"sub":@[@"测试",@"测试3"]},@{@"name":@"帮助",@"sub":@[@"测试",@"测试3"]},@{@"name":@"详情",@"sub":@[@"测试"]},@{@"name":@"查看",@"sub":@[@"测试4",@"测试4",@"哈哈哈"]}]};
     self.dic = dic;
     
-    HHChatBarView *chat = [[HHChatBarView alloc]initWithDictionary:dic];
+    HHChatBarView *chat = [[HHChatBarView alloc]initWithDictionary:nil];
     chat.ChatDelegate = self;
     [chat setupSubviewItems];
     [self.view addSubview:chat];

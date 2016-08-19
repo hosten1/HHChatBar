@@ -28,7 +28,9 @@
     if (self == [super init]) {
         self.frame = CGRectMake(0,kScreenSize.height-KViewHeight,kScreenSize.width,KViewHeight);
         self.backgroundColor = [UIColor colorWithRed:0.927 green:0.937 blue:0.907 alpha:1.000];
-        self.resourseDictionary = resourcesDic;
+        if (resourcesDic) {
+             self.resourseDictionary = resourcesDic;
+        }
         [self initRightBarButton];
     }
     return self;

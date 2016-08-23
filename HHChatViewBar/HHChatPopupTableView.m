@@ -8,6 +8,7 @@
 
 #import "HHChatPopupTableView.h"
 #import "HHChatPopupCell.h"
+#import "LDChatBarCellModel.h"
 #define cellid  @"HHChatPopupTableCell"
 
 @interface HHChatPopupTableView ()<UITableViewDelegate,UITableViewDataSource>
@@ -48,7 +49,7 @@
 #pragma mark   ----tableDataSource
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     HHChatPopupCell *cell = [HHChatPopupCell loadTableCell:tableView idResu:cellid ];
-    modelTemp *temp = [[modelTemp alloc]init];
+    LDChatBarCellModel *temp = [[LDChatBarCellModel alloc]init];
     temp.cellname =self.titleArray[indexPath.row];
     cell.mode = temp;
     return cell;

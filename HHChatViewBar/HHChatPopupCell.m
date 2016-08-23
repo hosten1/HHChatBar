@@ -25,7 +25,7 @@
     }
     return self;
 }
--(void)setMode:(modelTemp *)mode{
+-(void)setMode:(LDChatBarCellModel *)mode{
     _mode = mode;
     self.textLabel.text = mode.cellname;
     self.textLabel.textColor = [UIColor redColor];

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "modelTemp.h"
+
 
 typedef void(^indexCallBack)(NSIndexPath *index);
 

@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "modelTemp.h"
+#import "LDChatBarCellModel.h"
+
 @interface HHChatPopupCell : UITableViewCell
 +(instancetype)loadTableCell:(UITableView*)tableView idResu:(NSString*)cellid;
 
-@property (strong,nonatomic)modelTemp *mode ;
+@property (strong,nonatomic)LDChatBarCellModel *mode ;
 @end

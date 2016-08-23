@@ -84,15 +84,15 @@
     [self.leftBtn setBackgroundImage:[UIImage imageNamed:@"bubble_left_default"] forState:UIControlStateNormal];
     leftButton.backgroundColor = [UIColor clearColor];
     [self.self.leftBtn addTarget:self action:@selector(rightBtnClickWithChatItemView:) forControlEvents:UIControlEventTouchUpInside];
-
-    self.leftBtn.backgroundColor = [UIColor colorWithRed:0.982 green:0.972 blue:0.952 alpha:1.000];
     
 }
 -(void)setupSubviewItems{
+    if (self.rightSubButtonView) {
+        [self.rightSubButtonView removeFromSuperview];
+    }
     UIView *rightBtnView = [[UIView alloc]init];
     [self addSubview:rightBtnView];
     self.rightSubButtonView = rightBtnView;
-    rightBtnView.backgroundColor = [UIColor colorWithRed:0.987 green:1.000 blue:0.000 alpha:1.000];
     NSInteger count;
     if (self.ChatDelegate && [self.ChatDelegate respondsToSelector:@selector(numberOfSectionWithchatBar:)]) {
          count = [self.ChatDelegate  numberOfSectionWithchatBar:self];
@@ -126,25 +126,28 @@
     if (self.ChatDelegate && [self.ChatDelegate respondsToSelector:@selector(chatBar:subPopViewTitleOfRowWithIndexPath:)]) {
         titileArray = [self.ChatDelegate  chatBar:self subPopViewTitleOfRowWithIndexPath:[NSIndexPath indexPathForRow:0 inSection:section]];
     }
-    if (!titileArray) {
+    if (!titileArray || titileArray.count == 0) {
+        if (self.ChatDelegate && [self.ChatDelegate respondsToSelector:@selector(chatBar:didSelectIndex:)]) {
+            [self.ChatDelegate chatBar:self didSelectIndex:[NSIndexPath indexPathForRow:0 inSection:section]];
+        }
         return;
-    }
-    NSInteger subCount = titileArray.count;
-    CGFloat height = KCellHeight*subCount;
-
-    CGFloat width;
-    if (self.count > 3 || self.count == 1) {
-        width = 100;
     }else{
-         width = sender.frame.size.width-10;
-    }
-    CGFloat x;
-    if (self.count == 4||self.count == 5||self.count == 6) {
-        x = sender.frame.origin.x+2-30;
-    }else{
-        x = sender.frame.origin.x+2;
-    }
-    if (titileArray.count != 0) {
+        NSInteger subCount = titileArray.count;
+        CGFloat height = KCellHeight*subCount;
+        
+        CGFloat width;
+        if (self.count > 3 || self.count == 1) {
+            width = 100;
+        }else{
+            width = sender.frame.size.width-10;
+        }
+        CGFloat x;
+        if (self.count == 4||self.count == 5||self.count == 6) {
+            x = sender.frame.origin.x+2-30;
+        }else{
+            x = sender.frame.origin.x+2;
+        }
+        
         CGFloat y = kScreenSize.height-sender.frame.size.height-10 - height;
         HHChatPopupTableView *popView;
         WEAKSELF
@@ -194,10 +197,7 @@
                 }
             };
         }
-    }else{
-        if (self.ChatDelegate && [self.ChatDelegate respondsToSelector:@selector(chatBar:didSelectIndex:)]) {
-            [self.ChatDelegate chatBar:self didSelectIndex:[NSIndexPath indexPathForRow:0 inSection:section]];
-        }
+        
     }
     
     

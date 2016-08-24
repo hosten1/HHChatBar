@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="VIMInputExtendViewCell" reuseIdentifier="VIMInputExtendViewCell" id="gTV-IL-0wX" customClass="VIMInputExtendViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                <subviews>
+                    <imageView contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" highlighted="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VWF-rq-XcU">
+                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                    </imageView>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            </view>
+            <constraints>
+                <constraint firstItem="VWF-rq-XcU" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="8S8-2T-mpr"/>
+                <constraint firstItem="VWF-rq-XcU" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="Mxg-qg-S9K"/>
+                <constraint firstAttribute="bottom" secondItem="VWF-rq-XcU" secondAttribute="bottom" id="jkR-Rd-oHe"/>
+                <constraint firstAttribute="trailing" secondItem="VWF-rq-XcU" secondAttribute="trailing" id="usg-RT-gSy"/>
+            </constraints>
+            <connections>
+                <outlet property="extendImage" destination="VWF-rq-XcU" id="CgT-zI-s52"/>
+            </connections>
+            <point key="canvasLocation" x="284" y="188"/>
+        </collectionViewCell>
+    </objects>
+</document>

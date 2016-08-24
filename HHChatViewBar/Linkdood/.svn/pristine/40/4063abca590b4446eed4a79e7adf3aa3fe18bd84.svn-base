@@ -1,0 +1,40 @@
+//
+//  LDRoomListModel.m
+//  SDKClient
+//
+//  Created by xiong qing on 16/5/6.
+//  Copyright © 2016年 VRV. All rights reserved.
+//
+
+#import "LDRoomListModel.h"
+
+@implementation LDRoomListModel
+
+- (void)createRoom:(NSString*)roomName withChats:(NSArray*)chats completion:(void (^) (NSError *error,LDRoomListModel *roomList))completion
+{
+    LDRoomModel *roomModel = [[LDRoomModel alloc] init];
+    [roomModel setRoomName:roomName];
+    [roomModel setChatList:[NSMutableArray arrayWithArray:chats]];
+    [roomModel createRoom:^(NSError *error) {
+        if (!error) {
+            [self updateItem:roomModel];
+        }
+        if (completion) {
+            MainQue(completion(error,self););
+        }
+    }];
+}
+
+- (void)removeRoom:(LDRoomModel*)room completion:(void (^) (NSError *error,LDRoomListModel *roomList))completion
+{
+    [room removeRoom:^(NSError *error) {
+        if (!error) {
+            [self removeItem:room];
+        }
+        if (completion) {
+            MainQue(completion(error,self););
+        }
+    }];
+}
+
+@end

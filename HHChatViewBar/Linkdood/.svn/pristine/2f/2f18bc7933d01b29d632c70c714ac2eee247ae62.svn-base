@@ -1,0 +1,19 @@
+//
+//  LDMultiServerModel+Extend.h
+//  SDKClient
+//
+//  Created by 熊清 on 16/7/1.
+//  Copyright © 2016年 VRV. All rights reserved.
+//
+
+@interface LDMultiServerModel (Extend)
+
+/*!
+ *@method       hostListener
+ *@descript     子账号listener对象,仅用于内部业务逻辑,无实际功能
+ *@param        空
+ *@result       子账号listener对象
+ */
+- (id)hostListener;
+
+@end

@@ -1,0 +1,93 @@
+//
+//  SDKClient.h
+//  SDKClient
+//
+//  Created by xiong qing on 16/5/5.
+//  Copyright © 2016年 VRV. All rights reserved.
+//
+
+#ifndef LDClientHeaders_h
+
+#define LDClientHeaders_h
+
+#define VERSION         @"1.7.0"
+
+/**
+ *  系统常量及常用类别扩展方法
+ */
+#import "NSObject+category.h"
+
+/**
+ *  注册登录模块
+ */
+#import "LDAuthModel.h"
+#import "LDRegisterModel.h"
+#import "LDPasswordStipulateModel.h"
+
+/**
+ *  消息类型相关模块
+ */
+#import "LDTextMessageModel.h"
+#import "LDCardMessageModel.h"
+#import "LDLocationMessageModel.h"
+#import "LDImageMessageModel.h"
+#import "LDAudioMessageModel.h"
+#import "LDFileMessageModel.h"
+#import "LDExpressionMessageModel.h"
+#import "LDComboMessageModel.h"
+#import "LDDirectiveMessageModel.h"
+#import "LDSysMsgListModel.h"
+#import "LDMessageListModel.h"
+
+#import "LDRoomModel.h"
+#import "LDRoomListModel.h"
+
+#import "LDChatModel.h"
+#import "LDChatListModel.h"
+
+/**
+ *  通讯录相关模块
+ */
+#import "LDUserModel.h"
+#import "LDContactModel.h"
+#import "LDRobotModel.h"
+#import "LDGroupMemberModel.h"
+#import "LDMyselfModel.h"
+#import "LDGroupModel.h"
+#import "LDGroupFileModel.h"
+
+#import "LDContactListModel.h"
+#import "LDRobotListModel.h"
+#import "LDGroupMemberListModel.h"
+#import "LDGroupListModel.h"
+#import "LDBlackContactsModel.h"
+
+/**
+ *  组织架构相关模块
+ */
+#import "LDOrganizationModel.h"
+#import "LDEntpriseUserModel.h"
+#import "LDOrganizationContactListModel.h"
+
+/**
+ *  扩展功能相关模块
+ */
+#import "LDPrivacyModel.h"
+#import "LDTaskMessageModel.h"
+#import "LDTaskMessageListModel.h"
+#import "LDNoteModel.h"
+#import "LDNoteListModel.h"
+#import "LDMultiServerModel.h"
+#import "LDFaceToFaceModel.h"
+
+/**
+ *  推送监听相关模块
+ */
+#import "LDNotify.h"
+
+/**
+ *  全局运行数据存储模块
+ */
+#import "LDClient.h"
+
+#endif

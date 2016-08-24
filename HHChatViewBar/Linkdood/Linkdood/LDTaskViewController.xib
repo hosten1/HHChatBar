@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LDTaskViewController">
+            <connections>
+                <outlet property="tableView" destination="sHX-Kg-oXn" id="bni-c7-jDO"/>
+                <outlet property="view" destination="iN0-l3-epB" id="Lmm-dK-VPM"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="sHX-Kg-oXn">
+                    <rect key="frame" x="0.0" y="44" width="600" height="556"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </tableView>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="K8S-OH-fzN">
+                    <rect key="frame" x="165" y="8" width="270" height="29"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="270" id="DZX-jU-qxY"/>
+                    </constraints>
+                    <segments>
+                        <segment title="收到任务"/>
+                        <segment title="指派任务"/>
+                        <segment title="历史任务"/>
+                    </segments>
+                    <connections>
+                        <action selector="segmentChanged:" destination="-1" eventType="valueChanged" id="9mm-Mp-s3L"/>
+                    </connections>
+                </segmentedControl>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="K8S-OH-fzN" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="40c-zb-lEk"/>
+                <constraint firstItem="sHX-Kg-oXn" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="4I5-we-dj3"/>
+                <constraint firstAttribute="bottom" secondItem="sHX-Kg-oXn" secondAttribute="bottom" id="PP3-Hd-7ot"/>
+                <constraint firstAttribute="trailing" secondItem="sHX-Kg-oXn" secondAttribute="trailing" id="Zhq-Jo-X5k"/>
+                <constraint firstItem="K8S-OH-fzN" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="vE8-Yi-hT1"/>
+                <constraint firstItem="sHX-Kg-oXn" firstAttribute="top" secondItem="K8S-OH-fzN" secondAttribute="bottom" constant="8" id="wNU-Q9-sjo"/>
+            </constraints>
+        </view>
+    </objects>
+</document>

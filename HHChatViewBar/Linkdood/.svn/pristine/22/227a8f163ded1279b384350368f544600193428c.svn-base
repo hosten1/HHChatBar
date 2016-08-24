@@ -1,0 +1,70 @@
+//
+//  LDFileMessageModel.h
+//  SDKClient
+//
+//  Created by xiong qing on 16/4/18.
+//  Copyright © 2016年 VRV. All rights reserved.
+//
+
+@interface LDFileMessageModel : LDMessageModel
+
+/*!
+ @property fileName
+ @abstract 文件名
+ */
+@property (nonatomic, strong) NSString *fileName;
+
+/*!
+ @property fileSize
+ @abstract 文件大小
+ */
+@property (nonatomic) int64_t fileSize;
+
+/*!
+ @property encryptUser
+ @abstract 文件发送者id
+ */
+@property (nonatomic) int64_t encryptUser;
+
+/*!
+ @property mediaUrl
+ @abstract 文件URL
+ */
+@property (nonatomic, strong) NSString *mediaUrl;
+
+/*!
+ @property  localUrl
+ @descript  本地语音文件路径
+ */
+@property (strong,nonatomic) NSString *localUrl;
+
+/*!
+ @property enc_dec_key
+ @abstract 加密KEY
+ */
+@property (nonatomic, strong) NSString *enc_dec_key;
+
+/*!
+ @property isEncrypt
+ @abstract 是否加密 
+ */
+@property (nonatomic) int8_t docid;
+
+/*!
+ * @method    initWithFile
+ * @descript  初始化文件消息
+ * @param     filePath 语音文件路径
+ * @result    文件消息
+ */
+- (instancetype)initWithFile:(NSString *)filePath;
+
+/*!
+ * @method    downLoadFile
+ * @descript  下载文件
+ * @param     downloadResult 文件下载结果
+ * @param     progress       文件下载进度
+ * @result    文件消息
+ */
+- (void)downLoadFile:(FileDownloadResult)downloadResult onProgress:(FileDownloadProgress)progress;
+
+@end

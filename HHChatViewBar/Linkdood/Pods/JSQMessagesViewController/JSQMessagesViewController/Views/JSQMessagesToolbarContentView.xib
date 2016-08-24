@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="1Mg-ra-YQ1" customClass="JSQMessagesToolbarContentView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HSx-eX-Y41" customClass="JSQMessagesComposerTextView">
+                    <rect key="frame" x="46" y="7" width="208" height="30"/>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="fkh-hB-fu4"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dWj-SD-H9a" userLabel="Right button container">
+                    <rect key="frame" x="262" y="7" width="50" height="30"/>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="9f3-9c-J5r"/>
+                        <constraint firstAttribute="width" constant="50" id="gGx-Ip-LwV"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SEM-bD-xQO" userLabel="Extend buttons container">
+                    <rect key="frame" x="8" y="37" width="304" height="43"/>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="43" id="i96-79-0jt"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x5Z-ib-TOn" userLabel="Extend panel container">
+                    <rect key="frame" x="0.0" y="80" width="320" height="40"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="Ey9-DG-JlG"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wnB-F4-g8c" userLabel="robotRigthView">
+                    <rect key="frame" x="8" y="7" width="30" height="30"/>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="9EW-bG-7GM"/>
+                        <constraint firstAttribute="width" constant="30" id="GcR-ca-Ek2"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="wnB-F4-g8c" firstAttribute="leading" secondItem="1Mg-ra-YQ1" secondAttribute="leading" constant="8" id="3pg-dq-sfU"/>
+                <constraint firstItem="x5Z-ib-TOn" firstAttribute="leading" secondItem="1Mg-ra-YQ1" secondAttribute="leading" id="3ts-Ei-f4S"/>
+                <constraint firstItem="HSx-eX-Y41" firstAttribute="top" secondItem="1Mg-ra-YQ1" secondAttribute="top" constant="7" id="8kx-8v-g5N"/>
+                <constraint firstItem="wnB-F4-g8c" firstAttribute="top" secondItem="1Mg-ra-YQ1" secondAttribute="top" constant="7" id="BCo-Gf-549"/>
+                <constraint firstAttribute="trailing" secondItem="x5Z-ib-TOn" secondAttribute="trailing" id="BxP-jk-xgl"/>
+                <constraint firstItem="dWj-SD-H9a" firstAttribute="leading" secondItem="HSx-eX-Y41" secondAttribute="trailing" constant="8" id="Hlo-Qa-eUc"/>
+                <constraint firstAttribute="bottom" secondItem="x5Z-ib-TOn" secondAttribute="bottom" id="NTt-ha-npq"/>
+                <constraint firstItem="HSx-eX-Y41" firstAttribute="leading" secondItem="wnB-F4-g8c" secondAttribute="trailing" constant="8" id="P3A-pi-ykL"/>
+                <constraint firstItem="dWj-SD-H9a" firstAttribute="leading" secondItem="HSx-eX-Y41" secondAttribute="trailing" constant="8" id="Skx-Sn-ClZ"/>
+                <constraint firstItem="dWj-SD-H9a" firstAttribute="top" secondItem="1Mg-ra-YQ1" secondAttribute="top" constant="7" id="Uxb-Gz-heU"/>
+                <constraint firstItem="x5Z-ib-TOn" firstAttribute="top" secondItem="SEM-bD-xQO" secondAttribute="bottom" id="Y8r-ic-cbj"/>
+                <constraint firstAttribute="trailing" secondItem="SEM-bD-xQO" secondAttribute="trailing" constant="8" id="aY7-ud-gXS"/>
+                <constraint firstItem="SEM-bD-xQO" firstAttribute="top" secondItem="HSx-eX-Y41" secondAttribute="bottom" id="bhX-j8-j5B"/>
+                <constraint firstItem="SEM-bD-xQO" firstAttribute="leading" secondItem="1Mg-ra-YQ1" secondAttribute="leading" constant="8" id="eEh-Ry-OW2"/>
+                <constraint firstItem="x5Z-ib-TOn" firstAttribute="top" secondItem="wnB-F4-g8c" secondAttribute="bottom" constant="43" id="uLg-Kb-5gj"/>
+                <constraint firstItem="dWj-SD-H9a" firstAttribute="leading" secondItem="HSx-eX-Y41" secondAttribute="trailing" constant="8" id="vIa-NM-x9F"/>
+                <constraint firstAttribute="trailing" secondItem="dWj-SD-H9a" secondAttribute="trailing" constant="8" id="yTY-aI-GWP"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="BCo-Gf-549"/>
+                </mask>
+            </variation>
+            <connections>
+                <outlet property="extendButtonsContainerView" destination="SEM-bD-xQO" id="tag-8R-mAM"/>
+                <outlet property="extendPanelConstraint" destination="Ey9-DG-JlG" id="rGf-UP-gIU"/>
+                <outlet property="extendPanelContainerView" destination="x5Z-ib-TOn" id="noa-tS-Uys"/>
+                <outlet property="leftBarButtonContainerView" destination="wnB-F4-g8c" id="Ade-57-BEL"/>
+                <outlet property="leftButtonWidthConstraint" destination="GcR-ca-Ek2" id="bpd-83-fz8"/>
+                <outlet property="rightBarButtonContainerView" destination="dWj-SD-H9a" id="wvA-iL-Zhe"/>
+                <outlet property="rightBarButtonContainerViewWidthConstraint" destination="gGx-Ip-LwV" id="3mw-kv-WTx"/>
+                <outlet property="textView" destination="HSx-eX-Y41" id="DFy-vg-EOO"/>
+                <outlet property="textViewConstraint" destination="fkh-hB-fu4" id="uDx-OJ-h1T"/>
+            </connections>
+            <point key="canvasLocation" x="-498" y="203"/>
+        </view>
+    </objects>
+</document>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="PanelMapView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" pitchEnabled="NO" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j4a-JV-xM5">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="216" id="1Dl-yr-DIj"/>
+                    </constraints>
+                    <connections>
+                        <outlet property="delegate" destination="iN0-l3-epB" id="Xab-bN-Ro0"/>
+                    </connections>
+                </mapView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JD8-48-ySZ">
+                    <rect key="frame" x="271" y="167" width="32" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="32" id="Kr4-Dy-PaE"/>
+                        <constraint firstAttribute="height" constant="32" id="j4t-j0-fuH"/>
+                    </constraints>
+                    <state key="normal" backgroundImage="locsend"/>
+                    <connections>
+                        <action selector="sendLocPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="3CR-Uc-MGP"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fNs-QR-TqY">
+                    <rect key="frame" x="271" y="127" width="32" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="32" id="anM-Ja-RJk"/>
+                        <constraint firstAttribute="width" constant="32" id="plu-Qw-vgQ"/>
+                    </constraints>
+                    <state key="normal" backgroundImage="mylocation"/>
+                    <connections>
+                        <action selector="getMyselfLocPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="f5K-lj-xLQ"/>
+                    </connections>
+                </button>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pin" translatesAutoresizingMaskIntoConstraints="NO" id="oru-LE-qVk">
+                    <rect key="frame" x="151" y="72" width="15" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="ZFw-iX-tQO"/>
+                        <constraint firstAttribute="width" constant="15" id="vD4-da-FN8"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="JD8-48-ySZ" secondAttribute="trailing" constant="17" id="9s1-kj-fbf"/>
+                <constraint firstItem="fNs-QR-TqY" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="127" id="G7m-KJ-7My"/>
+                <constraint firstItem="oru-LE-qVk" firstAttribute="centerY" secondItem="j4a-JV-xM5" secondAttribute="centerY" constant="-16" id="Lfq-gR-Dx5"/>
+                <constraint firstAttribute="trailing" secondItem="fNs-QR-TqY" secondAttribute="trailing" constant="17" id="QJQ-Rp-eV1"/>
+                <constraint firstItem="oru-LE-qVk" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" constant="-2" id="XSO-qg-ct8"/>
+                <constraint firstItem="j4a-JV-xM5" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="e6j-jU-kA7"/>
+                <constraint firstItem="JD8-48-ySZ" firstAttribute="top" secondItem="fNs-QR-TqY" secondAttribute="bottom" constant="8" id="g7V-Lv-afI"/>
+                <constraint firstItem="j4a-JV-xM5" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ulC-0G-k3z"/>
+                <constraint firstAttribute="trailing" secondItem="j4a-JV-xM5" secondAttribute="trailing" id="vuJ-Pg-vpX"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="mapView" destination="j4a-JV-xM5" id="21S-LO-ZiH"/>
+            </connections>
+            <point key="canvasLocation" x="548" y="603"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="locsend" width="34" height="34"/>
+        <image name="mylocation" width="34" height="34"/>
+        <image name="pin" width="15" height="40"/>
+    </resources>
+</document>

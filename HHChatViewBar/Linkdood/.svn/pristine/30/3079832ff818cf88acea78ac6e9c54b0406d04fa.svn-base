@@ -1,0 +1,174 @@
+//
+//  LDMyselfModel.h
+//  SDKClient
+//
+//  Created by renxin-.- on 16/4/14.
+//  Copyright © 2016年 VRV. All rights reserved.
+//
+
+typedef enum : NSInteger {
+    config_birthday = 1,//对陌生人开放生日信息开关
+    config_phone = 2,//对陌生人开放手机号信息开关
+    config_email = 3,//对陌生人开放邮箱信息开关
+    config_verify = 4,//好友验证方式
+    config_vsign = 5,//v标通知方式
+    config_remind = 6,//@我通知方式
+    config_notice = 7,//消息通知详情
+} configInfo;
+
+typedef enum : NSInteger {
+    setting_online = 1 << 0,//显示在线状态开关
+    setting_checkDood = 1 << 2,//通过豆豆号搜索到我开关
+    setting_checkPhone = 1 << 3,//通过手机号搜索到我开关
+    setting_checkEmail = 1 << 4,//通过邮箱搜索到我开关
+    setting_share = 1 << 5,//分享更新提醒开关
+    setting_newMessage = 1 << 6,//新消息通知开关
+    setting_serveNotice = 1 << 11,
+    setting_serveV = 1 << 12,
+    setting_serveRemaid = 1 << 13,
+} settingInfo;
+
+
+@interface LDMyselfModel : LDUserModel{
+    
+    NSMutableDictionary *config;//个人配置信息
+    
+    int64_t setting;//个人设置信息
+    
+    int8_t noDisturbMode;//免打扰状态
+}
+
+/*!
+ * @method      modifyMyselfHeader
+ * @descript    用于登录用户修改头像
+ * @param       block 修改回调
+ * @result      空
+ * @sample:
+ 
+ LDMyselfModel *selfModel = [[LDMyselfModel alloc] initWithID:MYSELF.ID];
+ selfModel.avatar = avatarPath(头像缩略图在本地的路径,需要将图片保存沙盒临时目录);
+ selfModel.srcAvatar = srcAvatarPath(头像原图在本地的路径,需要将图片保存沙盒临时目录);
+ [selfModel modifyMyselfHeader:^(id response) {
+ //功能处理代码
+ }];
+ */
+- (void)modifyMyselfHeader:(void (^)(NSError *error, LDMyselfModel *myself))block;
+
+/*!
+ * @method      modifyMyselfHeader
+ * @descript    用于登录用户修改个人信息
+ * @param       block 修改回调
+ * @result      空
+ * @sample:
+ 
+ LDUserModel *selfModel = [[LDUserModel alloc] initWithID:MYSELF.ID];
+ selfModel.sex = 2;
+ [mySelf modifyBasicInfo:^(id response) {
+ //功能处理代码
+ }];
+ */
+- (void)modifyMyselfBasicInfo:(void (^)(NSError *error, LDMyselfModel *myself))block;
+
+/*!
+ @method        myselfConfigure
+ @descript      个人设置项值获取
+ @param         configure    通过枚举获取指定的值
+ @result        对应的设置项值
+ */
+- (NSNumber*)myselfConfigure:(configInfo)configure;
+
+/*!
+ * @method      modifyMyselfConfigure
+ * @descript    个人设置相关信息修改
+ * @param       settingInfo 需要修改的项和对应值
+ type:1(生日)/２(电话)/３(邮件)
+ value:1(所有人可见)/ 2(仅好友可见)/ 3(仅自己可见),默认1
+ 
+ type:4(好友验证方式)
+ value:   1：需要验证信息,2:不允许任何人添加,3:允许任何人添加，默认1
+ 
+ type:5 V标提醒方式
+ value: 1(表示始终有声音提醒)/2(表示始终无声音提醒)/3(不始终提醒),默认1
+ 
+ type:6 @相关人提醒模式
+ value: 1(表示始终有声音提醒)/2(表示始终无声音提醒)/3(不始终提醒),默认1
+ 
+ type:7 全局通知消息内容展现模式
+ value: 1(通知详情)/2(通知源,隐藏内容)/3(完全隐藏),默认2
+ 
+ settingInfo = @{
+ [NSNumber numberWithInt:config_birthday]:@1,
+ [NSNumber numberWithInt:config_phone]:@1,
+ [NSNumber numberWithInt:config_email]:@1,
+ [NSNumber numberWithInt:config_verify]:@1,
+ [NSNumber numberWithInt:config_vsign]:@1,
+ [NSNumber numberWithInt:config_remind]:@1,
+ [NSNumber numberWithInt:config_notice]:@1
+ };
+ * @result      空
+ 
+ 
+ */
+- (void)modifyMyselfConfigure:(NSDictionary *)configureInfo callBack:(void (^) (NSError *error))completion;
+
+/*!
+ @method    myselfSetting
+ @descript  个人设置项值获取
+ @param     info    通过枚举获取指定的值
+ @result    开启状态
+ */
+- (BOOL)myselfSetting:(settingInfo)info;
+
+/*!
+ * @method      modifyUserSetting
+ * @descript    个人设置信息修改
+ * @param       settingInfo  需要修改的项
+ * @example     [[LDClient sharedInstance].mySelfInfo modifyMyselfSetting:setting_online completion:^(NSError *error) {
+ 
+ }];
+ * @result      空
+ */
+- (void)modifyMyselfSetting:(settingInfo)settingInfo completion:(void (^) (NSError *error))completion;
+
+/*!
+ @method    noDisturbMode
+ @descript  全局免打扰状态
+ @param     空
+ @result    全局免打扰状态
+ */
+- (BOOL)noDisturbMode;
+
+/*!
+ @method    changeNodisturbModel
+ @descript  改变全局免打扰模式
+ @param     completion  回调
+ @result    空
+ */
+- (void)changeNodisturbModel:(void (^) (NSError *error))completion;
+
+/*!
+ @method    getVerifyCode
+ @descript  获取验证码
+ @param     phone    手机号
+ @param     region   地区编码
+ @result    设置项值
+ */
+- (void)getVerifyCode:(NSString*)phone onRegion:(NSString*)region completion:(void (^)(NSError *error))completion;
+
+/*!
+ @method    bindPhone
+ @descript  绑定手机
+ @param     info    通过枚举获取指定的值
+ @result    空
+ */
+- (void)bindPhone:(NSString *)verifyCode completion:(void (^)(NSError *error))completion;
+
+/*!
+ @method    bindEmail
+ @descript  绑定邮箱
+ @param     email    邮箱
+ @result    空
+ */
+-(void)bindEmail:(NSString *)email callBack:(void (^)(NSError *error))completion;
+
+@end

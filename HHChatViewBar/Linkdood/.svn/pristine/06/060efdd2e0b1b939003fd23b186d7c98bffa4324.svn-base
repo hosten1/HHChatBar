@@ -1,0 +1,68 @@
+//
+//  LDMessageModel+Extend.m
+//  SDKClient
+//
+//  Created by xiong qing on 16/4/18.
+//  Copyright © 2016年 VRV. All rights reserved.
+//
+
+#import "LDMessageModel+Extend.h"
+
+@implementation LDMessageModel (Extend)
+
+- (void)transformMessage{
+    if (self.messageType != MESSAGE_TYPE_TIP && self.messageType != MESSAGE_TYPE_INSTRUCTION && self.messageType != MESSAGE_TYPE_ASSEMBLE) {
+        self.message = transformTextMessage(self.message);
+    }
+}
+
+- (void)transformString{
+    if (self.messageType != MESSAGE_TYPE_TIP) {
+    NSMutableDictionary *imageDic = [NSMutableDictionary dictionaryWithCapacity:0];
+    [imageDic setObject:self.message forKey:@"body"];
+        self.message = [imageDic JSONString];
+    }
+}
+
+- (void)dynamicBinding:(FileDownloadResult)downloadResult
+            onProgress:(FileDownloadProgress)progress
+{
+    //动态绑定文件下载进度和结果
+    if (downloadResult) {
+        objc_setAssociatedObject(self, "fileDownloadResult", downloadResult, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    objc_setAssociatedObject(self, "progress", progress, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void)sendMessageWithStatus:(MessageSendStatus)status
+{
+    //动态绑定消息发送状态
+    if(status){
+        self.status = msg_sending;
+        MainQue(status(msg_sending););
+        objc_setAssociatedObject(self, "messageSendStatus", status, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    
+    //发送消息
+    //发送前将消息进行消息体组装
+    [self transformString];
+    [SDKClient sendRequestToSDK:(self.messageType == MESSAGE_TYPE_TASK?imsdkldd::ldd_logic_cmd_sendTaskMsg:imsdk::logic_cmd_sendMessage) postData:self completion:nil];
+    
+    //消息发送后格式化消息体
+    [self transformMessage];
+}
+
+- (void)sendMessageWithProgress:(FileUploadProgress)progress
+                       onStatus:(MessageSendStatus)status
+{
+    //动态绑定文件上载进度
+    objc_setAssociatedObject(self, "progress", progress, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    //动态绑定消息发送状态
+    if(status){
+        MainQue(status(msg_file_sending););
+        objc_setAssociatedObject(self, "messageSendStatus", status, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+}
+
+@end

@@ -1,0 +1,190 @@
+//
+//  LDNoteModelTest.m
+//  Linkdood
+//
+//  Created by VRV2 on 16/6/12.
+//  Copyright © 2016年 xiong qing. All rights reserved.
+//
+
+
+#import <XCTest/XCTest.h>
+#import "LDTextTool.h"
+#import <SDKClient/SDKClient.h>
+
+
+@interface LDNodeModelTest : XCTestCase
+@property(nonatomic,strong)LDClient *client;
+@property(nonatomic,strong)LDTextTool *utiles;
+@property(nonatomic,strong) LDNoteListModel *noteList;
+@end
+
+@implementation LDNodeModelTest
+
+- (void)setUp {
+    [super setUp];
+    
+    LDClient *client =  [LDClient sharedInstance];
+    _client = client;
+    _utiles = [[LDTextTool alloc]init];
+    _noteList = [[LDNoteListModel alloc]init];
+}
+/**
+ *  创建网络文本笔记
+ 
+ 
+ */
+-(void)testAddNoteOfNodeListForText{
+    __block BOOL done = NO;
+    LDNoteModel *noteModel = [LDNoteModel buildWithTitle:@"测试" content:@"💗需几年，恨只需一秒" keyword:@"情感" type:NOTE_TYPE_TEXT sourceType:NOTE_SOURCE_ONLINE];
+    [_noteList addNote:noteModel completion:^(NSError *error) {
+        XCTAssertTrue(!error,@"创建网络文本笔记失败");
+        done = !error;
+        
+        
+    }];
+    XCTAssertTrue([self.utiles waitFor:&done timeout:3],
+                  @"Timed out waiting for response asynch method completion");
+}
+/**
+ *  创建网络图片笔记
+ */
+-(void)testAddNoteOfNodeListForImage{
+    /*
+     NOTE_TYPE_IMAGE = 2,
+     NOTE_TYPE_AUDIO = 3,
+     NOTE_TYPE_VIDEO = 4,
+     NOTE_TYPE_URL = 5,
+     */
+    __block BOOL done = NO;
+    LDNoteModel *noteModel = [LDNoteModel buildWithTitle:@"测试" content:@"img.png" keyword:@"情感" type:NOTE_TYPE_IMAGE sourceType:NOTE_SOURCE_ONLINE];
+    [_noteList addNote:noteModel completion:^(NSError *error) {
+        XCTAssertTrue(!error,@"创建网络图片笔记失败");
+        done = !error;
+        
+        
+    }];
+    XCTAssertTrue([self.utiles waitFor:&done timeout:3],
+                  @"Timed out waiting for response asynch method completion");
+}
+/**
+ *  创建本地文本笔记
+ */
+-(void)testAddNoteOfNodeListFortextLocal{
+    /*
+     NOTE_TYPE_IMAGE = 2,
+     NOTE_TYPE_AUDIO = 3,
+     NOTE_TYPE_VIDEO = 4,
+     NOTE_TYPE_URL = 5,
+     */
+    __block BOOL done = NO;
+    LDNoteModel *noteModel = [LDNoteModel buildWithTitle:@"测试" content:@"haha,ceshi xiaoxi nihaoya " keyword:@"情感" type:NOTE_TYPE_TEXT sourceType:NOTE_SOURCE_LOCAL];
+    [_noteList addNote:noteModel completion:^(NSError *error) {
+        XCTAssertTrue(!error,@"创建网络图片笔记失败");
+        done = !error;
+        
+        
+    }];
+    XCTAssertTrue([self.utiles waitFor:&done timeout:3],
+                  @"Timed out waiting for response asynch method completion");
+}
+/**
+ * 编辑笔记
+ */
+-(void)testEditNoteOfNodeList{
+     __block BOOL done = NO;
+   [_noteList queryNoteByBeginID:0 offset:30 flag:1 completion:^(NSError *error) {
+       XCTAssertTrue(!error,@"查询笔记失败");
+       
+       if (!error && [_noteList numberOfItems] > 0) {
+             NSMutableArray *deleteNoteModel = [NSMutableArray array];
+             LDNoteModel *editNoteModel;
+          for (NSInteger i = 0; i< [_noteList numberOfItems]; i++) {
+              
+               editNoteModel =(LDNoteModel*) [_noteList itemAtIndex:i];
+               [deleteNoteModel addObject:[NSNumber numberWithLongLong:editNoteModel.ID]];
+           }
+           if (editNoteModel.type == NOTE_TYPE_TEXT) {
+               editNoteModel.content = @"测试全部的信息 个人";
+           }
+           editNoteModel.title = @"这是来自单元测试的标题";
+           editNoteModel.title = @"单元测试";
+          [_noteList editNote:editNoteModel  completion:^(NSError *error) {
+         
+              XCTAssertTrue(!error,@"编辑笔记失败");
+              done = !error;
+        
+         }];
+
+       }else{
+           XCTAssertTrue([_noteList numberOfItems] > 0,@"查询笔记失败");
+           done = YES;
+       }
+   }];
+    XCTAssertTrue([self.utiles waitFor:&done timeout:3],
+                  @"Timed out waiting for response asynch method completion");
+
+}
+
+/**
+ *  删除笔记
+ */
+-(void)testRemoveNoteOfNodeList{
+    __block BOOL done = NO;
+    [_noteList queryNoteByBeginID:0 offset:30 flag:1 completion:^(NSError *error) {
+        XCTAssertTrue(!error,@"查询笔记失败");
+        if (!error && [_noteList numberOfItems] > 0) {
+            NSMutableArray *deleteNoteModel = [NSMutableArray array];
+            LDNoteModel *DeleNoteModel;
+            for (NSInteger i = 0; i< [_noteList numberOfItems]; i++) {
+                
+                DeleNoteModel =(LDNoteModel*) [_noteList itemAtIndex:i];
+                [deleteNoteModel addObject:[NSNumber numberWithLongLong:DeleNoteModel.ID]];
+                if (i > 1) {
+                    break;
+                }
+            }
+            [_noteList deleteNotes:deleteNoteModel completion:^(NSError *error) {
+                
+                XCTAssertTrue(!error,@"删除笔记失败");
+                done = !error;
+                
+            }];
+            
+        }else{
+            XCTAssertTrue([_noteList numberOfItems] > 0,@"查询笔记失败");
+            done = YES;
+        }
+    }];
+    XCTAssertTrue([self.utiles waitFor:&done timeout:3],
+                  @"Timed out waiting for response asynch method completion");
+}
+/**
+ * 查询记事本 全部的
+ */
+-(void)testQueryNoteOfNodeList{
+    __block BOOL done = NO;
+    [_noteList queryNoteByBeginID:0 offset:30 flag:1 completion:^(NSError *error) {
+        XCTAssertTrue(!error,@"查询笔记失败");
+        
+        if (!error && [_noteList numberOfItems] > 0) {
+                XCTAssertTrue([_noteList numberOfItems] == 3,@"查询的记事本条数 错误");
+                done = !error;
+            
+        }else{
+            XCTAssertTrue([_noteList numberOfItems] > 0,@"查询笔记失败");
+            done = YES;
+        }
+    }];
+    XCTAssertTrue([self.utiles waitFor:&done timeout:3],
+                  @"Timed out waiting for response asynch method completion");
+    
+}
+
+- (void)testPerformanceExample {
+    // This is an example of a performance test case.
+    [self measureBlock:^{
+        // Put the code you want to measure the time of here.
+    }];
+}
+
+@end

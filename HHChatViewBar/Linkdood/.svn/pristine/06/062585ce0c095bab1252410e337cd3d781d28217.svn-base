@@ -1,0 +1,17 @@
+//
+//  LDContactListModel+Extend.m
+//  SDKClient
+//
+//  Created by 王越 on 16/4/26.
+//  Copyright © 2016年 VRV. All rights reserved.
+//
+
+#import "LDContactListModel+Extend.h"
+
+@implementation LDContactListModel (Extend)
+
+- (void)refreshContactsOnlineType{
+    [SDKClient sendRequestToSDK:imsdk::logic_cmd_getBuddyOnline postData:self completion:nil];
+}
+
+@end

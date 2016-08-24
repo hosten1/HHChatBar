@@ -1,0 +1,21 @@
+//
+//  LDExpressionMessageModel.h
+//  SDKClient
+//
+//  Created by renxin on 16/6/21.
+//  Copyright © 2016年 VRV. All rights reserved.
+//
+
+#import <SDKClient/SDKClient.h>
+
+@interface LDExpressionMessageModel : LDMessageModel
+
+/*!
+ * @method    initWithExpression
+ * @descript  初始化名片消息
+ * @param     item  名片对象(好友、群组等)
+ * @result    名片消息对象
+ */
+- (instancetype)initWithExpression:(NSInteger)type;
+
+@end

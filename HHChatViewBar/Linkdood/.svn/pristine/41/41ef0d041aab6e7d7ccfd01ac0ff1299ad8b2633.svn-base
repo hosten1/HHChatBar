@@ -1,0 +1,13 @@
+/* 
+  InfoPlist.strings
+  IM
+
+  Created by spinery on 15/8/3.
+  Copyright (c) 2015年 VRV. All rights reserved.
+*/
+//应用名称
+CFBundleDisplayName="信源豆豆";
+//tabbar标签
+Contacts="联系人";
+Organization="组织架构";
+Me="我";

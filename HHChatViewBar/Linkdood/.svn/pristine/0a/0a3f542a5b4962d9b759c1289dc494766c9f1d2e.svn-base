@@ -1,0 +1,159 @@
+//
+//  LDRegisterModel.m
+//  SDKClient
+//
+//  Created by xiong qing on 16/3/4.
+//  Copyright © 2016年 VRV. All rights reserved.
+//
+
+#import "LDRegisterModel.h"
+
+@implementation LDRegisterModel
+
+- (void)registeryWithPassword:(NSString*)password
+                     nickName:(NSString*)nickName
+                   verifyCode:(NSString*)verifyCode
+                   completion:(void (^) (NSError *error))completion
+{
+    LDPasswordStipulateModel *passwordInfo = [LDClient sharedInstance].passwordInfo;
+    passwordInfo.operType = AuthOperRegister;
+    if (![passwordInfo checkPasswordWithText:password] && password){
+        NSError *error = [NSError errorWithResponse:542];
+        if (completion) {
+            MainQue(completion(error);)
+        }
+        return;
+    }
+    
+    self.password = password;
+    self.nickName = nickName;
+    self.verifyCode = verifyCode;
+    
+    objc_setAssociatedObject(self, "setPasswordCompletion", completion, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [SDKClient sendRequestToSDK:imsdk::logic_cmd_reg2 postData:self completion:nil];
+}
+
+- (void)resetPassword:(NSString*)password
+             nickName:(NSString*)nickName
+           verifyCode:(NSString*)verifyCode
+           completion:(void (^) (NSError *error))completion
+{
+    LDPasswordStipulateModel *passwordInfo = [LDClient sharedInstance].passwordInfo;
+    passwordInfo.operType = AuthOperReset;
+    if (![passwordInfo checkPasswordWithText:password] && password){
+        NSError *error = [NSError errorWithResponse:542];
+        if (completion) {
+            MainQue(completion(error);)
+        }
+        return;
+    }
+    self.password = password;
+    self.nickName = nickName;
+    self.verifyCode = verifyCode;
+    objc_setAssociatedObject(self, "setPasswordCompletion", completion, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [SDKClient sendRequestToSDK:imsdk::logic_cmd_resetPw2 postData:self completion:nil];
+}
+
+-(void)transformToRequest:(void **)reqData witCmd:(unsigned short)cmd
+{
+    if (cmd == imsdk::logic_cmd_reg1 || cmd == imsdk::logic_cmd_resetPw1) {
+        imsdk::req_regParam1 *req = new imsdk::req_regParam1();
+        req->usertype = self.usertype;
+        req->number = [[self.nationalCode stringByAppendingString:self.account] UTF8String];
+        req->domain = [self.domain UTF8String];
+        req->login.device_type = imsdk::client_dev_phone;
+        req->login.tick = 1;
+        req->login.mac = [DEVICEMAC UTF8String];
+        req->login.device_info = [DEVICEMODEL UTF8String];
+        req->login.version = [APP_VERSION UTF8String];
+        req->login.local = [formatLanguage() UTF8String];
+        req->login.net_type = "wifi";
+        req->login.user = [self.account UTF8String];
+        req->login.mark = [self.domain UTF8String];
+        req->login.area = [self.domain UTF8String];
+        req->login.nationalCode = [self.nationalCode UTF8String];
+        req->login.userType = self.usertype;
+        *reqData = req;
+        return;
+    }
+    if (cmd == imsdk::logic_cmd_reg2 || cmd == imsdk::logic_cmd_resetPw2){
+        imsdk::req_regParam2 *req = new imsdk::req_regParam2();
+        if (self.verifyCode != nil) {
+            req->code = [self.verifyCode UTF8String];
+        }
+        if (self.nickName != nil) {
+            req->name = [self.nickName UTF8String];
+        }
+        if (self.password != nil) {
+            req->pwd = [self.password UTF8String];
+        }
+        id registryID = objc_getAssociatedObject(self, "registryID");
+        if (registryID) {
+            req->registryID = [registryID longLongValue];
+        }
+        *reqData = req;
+        return;
+    }
+    if (cmd == imsdk::logic_cmd_quickRegister) {
+        imsdk::req_quickRegister *req = new imsdk::req_quickRegister();
+        if (self.account) {
+            req->account = [self.account UTF8String];
+        }
+        if (self.nickName != nil) {
+            req->name = [self.nickName UTF8String];
+        }
+        req->type = self.usertype;
+        if (self.password != nil) {
+            req->password = [self.password UTF8String];
+        }
+        return;
+    }
+}
+
+- (void)callbackByResponse:(void *)rspData witCmd:(unsigned short)cmd
+{
+    if (cmd == imsdk::logic_cmd_reg1 || cmd == imsdk::logic_cmd_resetPw1) {
+        imsdk::resp_regResult1 *result = (imsdk::resp_regResult1 *)rspData;
+        NSError *error = [NSError errorWithResponse:result->code];
+        if (!error) {
+            objc_setAssociatedObject(self, "registryID", [NSNumber numberWithLongLong:result->registryID], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+            
+            //预登录成功获取密码强度
+            [[LDClient sharedInstance] queryPasswordInfo];
+        }
+        void (^completion) (NSError *error,LDRegisterModel *callRegister) = objc_getAssociatedObject(self, "completion");
+        if (completion) {
+            MainQue(completion(error,self););
+        }
+        return;
+    }
+    if (cmd == imsdk::logic_cmd_reg2 || cmd == imsdk::logic_cmd_resetPw2){
+        imsdk::resp_regResult2 *result = (imsdk::resp_regResult2 *)rspData;
+        NSError *error = [NSError errorWithResponse:result->code];
+        if (self.verifyCode != nil) {
+            self.verifyCode = nil;
+        }
+        if (self.nickName != nil) {
+            self.nickName = nil;
+        }
+        if (self.password != nil) {
+            self.password = nil;
+        }
+        void (^completion) (NSError *error) = objc_getAssociatedObject(self, "setPasswordCompletion");
+        if (completion) {
+            MainQue(completion(error););
+        }
+        return;
+    }
+    if (cmd == imsdk::logic_cmd_quickRegister) {
+        imsdk::resp_commonResult *result = new imsdk::resp_commonResult();
+        NSError *error = [NSError errorWithResponse:result->code];
+        void (^completion) (NSError *error) = objc_getAssociatedObject(self, "quickRegister");
+        if (completion) {
+            MainQue(completion(error););
+        }
+        return;
+    }
+}
+
+@end

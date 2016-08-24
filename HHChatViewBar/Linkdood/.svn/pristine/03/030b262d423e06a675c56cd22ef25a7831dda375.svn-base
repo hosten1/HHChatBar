@@ -1,0 +1,47 @@
+//
+//  LDEnterpriseUserSearchTest.m
+//  Linkdood
+//
+//  Created by renxin on 16/6/13.
+//  Copyright © 2016年 xiong qing. All rights reserved.
+//
+
+#import <XCTest/XCTest.h>
+#import <SDKClient/SDKClient.h>
+#import "LDTextTool.h"
+@interface LDEnterpriseUserSearchTest : XCTestCase
+@property(nonatomic,strong)LDTextTool *textTool;
+@property(nonatomic,strong)LDOrganizationModel *organizationModel;
+//@property(nonatomic,strong)LDEnterpriseUserSearch *enterpriseUserSearch;
+
+
+@end
+
+@implementation LDEnterpriseUserSearchTest
+
+- (void)setUp {
+    [super setUp];
+    _textTool = [[LDTextTool alloc] init];
+    _organizationModel = [[LDOrganizationModel alloc] init];
+//    _enterpriseUserSearch = [[LDEnterpriseUserSearch alloc] init];
+
+
+}
+
+- (void)tearDown {
+    // Put teardown code here. This method is called after the invocation of each test method in the class.
+    [super tearDown];
+}
+
+
+//搜索企业成员
+- (void)testsearchEnterpriseUserBy{
+    __block BOOL done = NO;
+//    [_enterpriseUserSearch searchEnterpriseUserBy:_organizationModel completion:^(NSError *error, NSArray<LDEntpriseUserModel *> *user) {
+//        done = !error;
+//        XCTAssertTrue(!error,@"搜索企业成员");
+//    }];
+//    [_textTool waitFor:&done timeout:6];
+}
+
+@end

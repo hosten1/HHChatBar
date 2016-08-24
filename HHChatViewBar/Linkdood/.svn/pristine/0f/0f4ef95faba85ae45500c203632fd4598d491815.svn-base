@@ -1,0 +1,331 @@
+﻿/*
+ * cfgExport.h
+ *  各端通过获取的数据结构定义,此头文件中所有结构体定义以st_开头
+ *  Created on: 2015年8月5日
+ *      Author: sharp
+ */
+
+#ifndef PROTOCOL_CFGEXPORT_H_
+#define PROTOCOL_CFGEXPORT_H_
+
+#include <string>
+#include <vector>
+#include <sstream>
+#include <iostream>
+
+#include "config.h"
+
+///获取配置的类型 ,标识<G>的是全局配置，不用登录就可以用．，<U>是用户/客户端实例相关配置.
+///接口实际参数为[param] 的指针
+enum  {
+	///<G>获取终端最近一次登录信息　[param] 写：st_LoginInfoBean　，读：st_loginfoArray
+	cfg_lastLogininfo =1,
+	///<G>代理配置，ＰＣ专用 [param] st_netProxy
+	cfg_netproxy=2,
+	///<G>网络设置, PC 专用 [param] st_net
+	cfg_net=3,
+	///<G>根路径　　[param]　std::string
+	cfg_rootpath=4,
+	///<G>头像路径 [param]　std::string
+	cfg_headImgpath=5,
+	///<G>是否插电 [param] bool   true插电，bool不插电 上面设置，在ＳＤＫ里面使用
+	cfg_plugPower=6,
+	/**
+	 * <G>网络状态 [param] int32 　0：断网，１：在线WIFI或者有线,2:在线２Ｇ，３：在线３Ｇ，４在线４Ｇ
+	 * 当网络发生变化的时候上面设置，ＳＤＫ使用
+	 */
+	cfg_netStatus=7,
+	///<U>获取该用户聊天中图片信息的保存路径 [param]　std::string
+	cfg_userImgPath=8,
+	///<U>获取该用户聊天中音频信息的保存路径 [param]　std::string
+	cfg_userAudioPath=9,
+	///<U>获取该用户聊天中视频信息的保存路径 [param]　std::string
+	cfg_userVideoPath=10,
+	///<U>获取该用户聊天中cache           [param]　std::string
+	cfg_usercachePath=11,
+	///<U>获取该用户聊天中文件信息的保存路径 [param]　std::string
+	cfg_userFilePath=12,
+	///<G>设置登录地址, 内部调试使用.   [param]　st_loginAddress
+	cfg_loginAddress=13,
+	/**
+	 * <U>日志标识
+	 * [param] int32 , 默认开发所有日志
+	 * 0   : 关闭所有日志
+	 * 0xFF: 打开所有日志
+	 * 0x01: 调试日志 详细情况,标识：sdklog_debug
+	 * 0x02: 运行状态信息，标识： sdklog_trace
+	 * 0x04: 注意 有可能出错 ,比如内存占用高等 标识: sdklog_notice
+	 * 0x08: 出错,但可以自行修复	sdklog_warn,
+	 * 0x10: 除错，可能无法恢复    sdklog_err,
+	 */
+	cfg_setLogFlag=14,
+	///<U>获取plugin管理接口  [param] IPluginSlot **/
+	cfg_getPluginSlot,
+	/**
+	 * <G>设置安卓消息响应模式,所有客户端实例都受控制,需要在第一次实例前调用
+	 * 设置１，ＳＤＫ线程主动调用ＪＡＶＡ层ＡＰＩ
+	 * 设置０，虚拟机线程主动调用ＳＤＫ，ＳＤＫ进行回调.
+	 * [param] int
+	 */
+	cfg_setAndroidRespMode=16,
+	/**
+	 * <U>当cfg_setAndroidRespMode为１时有效,每个实例设置不同的对象
+	 * 这个类要和安卓的ＳＤＫAPI层商议好
+	 */
+	cfg_setJvmInterfaceObjForResp=17,
+	/**
+	 * 获取ＳＤＫ版本号 [param] std::string
+	 */
+	cfg_sdkVersion=18,
+
+	/**
+	 * 屏幕状态 安卓,IOS专用 [param] int , 0是暗，1是亮
+	 */
+	cfg_screenStatus=19,
+
+	/**
+	 * ＳＤＫ证书路径,全路径,返回失败，标识证书校验失败.需要在initClient之前设置
+	 */
+	cfg_certificatePath=20,
+	/**
+	 * 传入的文字编码格式  [param] int , 0是utf-8，1是gb 默认为uft-8,
+	 * 需要在initClient之前设置.
+	 */
+	cfg_textCoding = 21,
+
+	/**
+	 * <U>互联功能配置
+	 * [param]  int , 0是否没有互联，１是有互联。默认使用互联
+	 */
+	cfg_InterConnect,
+
+	/**
+	 * <G>APP名称， 安卓是包名，IOS是应用ID。
+	 * [param] string
+	 */
+	cfg_appName,
+
+	/**
+	 *　<U>获取预登录附加数据
+	 *　[param] st_loginExData ,
+	 *　[return] true 代表服务器可用
+	 */
+	cfg_loginExData,
+
+	/**
+	 * <U>设置ＮＯＴＩＦＹ状态
+	 * [param] int   0代表打开，１代表关闭
+	 */
+	cfg_notifyStatus,
+
+	/**
+	 * <U> 多服务器信息保留,for linkdood json string.
+	 * [param] vector<st_subSrv> ,包含当前登录的服务器
+	 */
+	cfg_subserverInfo ,
+
+	/**
+	 * <U> 登录后批量消息推送（for nanjing 移动端多服务器）,通过异步推送到界面
+	 */
+	cfg_getLoginDatagain,
+
+	/**
+	 * <U>当前语言环境
+	 * [param] int 1.中文 2.英文
+	 */
+	cfg_language,
+
+	cfg_Export_max,      	//配置导出最大值,无特殊意义
+ };
+
+/*
+ * 最近一次登录信息基本结构
+ */
+struct    st_LoginInfoBean{
+	st_LoginInfoBean(){
+        flag = 0;
+        status = 0;
+        keepPwd = 0;
+        autoLogin = 0;
+        userid = 0;
+        time = 0;
+		userType = 0 ;
+	}
+
+	int32 flag;										      /*多账号登录顺序*/
+	int32 status;									      /*在线状态-1：离线，1:在线；2:隐身,3:忙碌,4:离开,5:请勿打扰,6:想聊天 移动端用前两个*/
+	int32 keepPwd;								          /*是否记录密码1：是，0：否 PC使用*/
+	int32 autoLogin;							          /*是否自动登录1：是，0：否 PC使用*/
+	int64 userid ;									      /*用户ID*/
+	int64 time;										      /*上次登录时间*/
+	std::string account;						          /*帐号*/
+	std::string name ;                                    /*用户名称*/
+	std::string pwd;								      /*密码 未加密*/
+	std::string avatar;							          /*头像 PC使用*/
+	std::string entArea;						          /*企业域*/
+	int32 userType;                                    	  /*登录账户类型，1：手机，2：QQ，3：邮箱，4：UserID,*/
+	std::string nationalCode;                             /*国家代码*/
+
+	const std::string output_parameter()
+	{
+		std::stringstream ss;
+		ss << "st_LoginInfoBean::flag ＝ " << flag << "\n";
+		ss << "st_LoginInfoBean::status ＝ " << status << "\n";
+		ss << "st_LoginInfoBean::keepPwd ＝ " << keepPwd << "\n";
+		ss << "st_LoginInfoBean::userid ＝ " << userid << "\n";
+		ss << "st_LoginInfoBean::time ＝ " << time << "\n";
+		ss << "st_LoginInfoBean::account ＝ " << account << "\n";
+		ss << "st_LoginInfoBean::name ＝ " << name << "\n";
+		ss << "st_LoginInfoBean::pwd ＝ " << pwd << "\n";
+		ss << "st_LoginInfoBean::avatar ＝ " << avatar << "\n";
+		ss << "st_LoginInfoBean::entArea ＝ " << entArea << "\n";
+		ss << "st_LoginInfoBean::nationalCode ＝ " << nationalCode << "\n";
+
+#ifdef LOCAL_DEBUG
+		std::cout << ss.str();
+#endif
+		return ss.str();
+	}
+};
+
+/**
+ *   cfg_lastLogininfo  类型返回
+ */
+struct    st_loginfoArray  {
+	/*
+	*  移动端只有一条信息,
+	*  PC端多条信息
+	*/
+	std::vector<st_LoginInfoBean>  _vt;
+
+	const std::string output_parameter()
+	{
+		std::stringstream ss;
+		ss << "st_loginfoArray::_vt.size() ＝ " << _vt.size() << "\n";
+		for (unsigned int i = 0; i < _vt.size(); i++)
+		{
+			ss << "st_loginfoArray::_vt[ " << i << " ] ＝ " << _vt[i].output_parameter() << "\n";
+		}
+
+#ifdef LOCAL_DEBUG
+		std::cout << ss.str();
+#endif
+		return ss.str();
+	}
+};
+
+/**
+ * 代理配置
+ * PC专用
+ */
+struct st_netProxy {
+	int8     type;         //0-不使用，１-http1.1  2-http1.0  3-socket4  4-socket5
+	uint16   port;         //端口
+	std::string addr;      //地址
+	std::string user;      //用户名
+	std::string pw;        //密码
+	
+	const std::string output_parameter()
+	{
+		std::stringstream ss;
+		ss << "st_netProxy::type ＝ " << type << "\n";
+		ss << "st_netProxy::port ＝ " << port << "\n";
+		ss << "st_netProxy::addr ＝ " << addr << "\n";
+		ss << "st_netProxy::user ＝ " << user << "\n";
+		ss << "st_netProxy::pw ＝ " << pw << "\n";
+
+#ifdef LOCAL_DEBUG
+		std::cout << ss.str();
+#endif
+		return ss.str();
+	}
+};
+
+/**
+ * 网络配置
+ * PC专用
+ */
+struct st_net {
+	/**
+	 * 每条记录格式为　　起始ＩＰ-终止ｉＰ
+	 * X.X.X.X-X.X.X.X
+	 */
+	std::vector<std::string>  addrlist;
+	
+	const std::string output_parameter()
+	{
+		std::stringstream ss;
+		ss << "st_net::addrlist.size() ＝ " << addrlist.size() << "\n";
+		for (unsigned int i = 0; i < addrlist.size(); i++)
+		{
+			ss << "st_net::addrlist[ " << i << " ] ＝ " << addrlist[i] << "\n";
+		}
+
+#ifdef LOCAL_DEBUG
+		std::cout << ss.str();
+#endif
+		return ss.str();
+	}
+};
+
+/**
+ * 登录地址结构
+ */
+struct st_loginAddress {
+	std::string strIp ; //IP地址或者域名
+	uint16      port  ; //端口
+	st_loginAddress() {
+		port = 80 ;
+	}
+	
+	const std::string output_parameter()
+	{
+		std::stringstream ss;
+		ss << "st_loginAddress::strIp ＝ " << strIp << "\n";
+		ss << "st_loginAddress::port ＝ " << port << "\n";
+
+#ifdef LOCAL_DEBUG
+		std::cout << ss.str();
+#endif
+		return ss.str();
+	}
+};
+
+/**
+ * 预登录附加结构
+ */
+struct st_loginExData {
+	std::string   srvName ;  ///　服务器名称,获取时候必须填写 !!!
+	/**
+	 * \brief 设备信息 , 获取时候必须填写 !!!
+	 * 例如 pc-window7,an-xiaomei2,ios-iphone4s
+	 */
+	std::string   device ;
+	std::string   eLogo ;   ///　英文ＬＯＧＯ
+	std::string   imName ;  ///　名称
+	std::string   bgImg  ;  ///　背景图片
+	std::string   eName  ;  ///　企业名称
+	std::string   logoImg ; ///　标识图片
+	int8   createGroup ; ///　是否开放组功能开关 关闭：０，打开：１
+	int8   tools; 		///　是否显示"工具"页
+	int8   priv ; 		///　是否允许群内私聊开关 关闭：０，打开：１
+	int8   plan ; 		///　群成员是否可以发起安排　是：　１，否：０
+	int8   activity ; 	///群成员是否可以发起活动开关　打开：１　，　关闭：　０
+	int8   attention ; 	/// 是否显示"关注页" 是:1 否：０
+	int8   redBag ;    	///　是否显示红包 是：１　，否: 0
+	int8   offLine ;   	///　离线配置项　0.默认的,密码离线登陆,1.不需要密码就可以登陆,相应的记住prikey,2.不允许离线口令登陆
+	int8   smcMode ;   	///　通知消息详情模式（1.通知详情，2.通知源隐藏内容 3.完全隐藏）
+	int8   bReg ;      	/// 是否允许客户端注册
+	std::string Orijson ; ///原始的ＪＳＯＮ
+};
+
+struct st_subSrv {
+	std::string  addr;  ///服务器地址
+	int64        userid;///用户ＩＤ
+	std::string  name ; ///登录账号名称
+	std::string  avatar ; ///头像
+	std::string  account ;///账号
+	int8         type ;  ///账号类型
+};
+
+#endif /* PROTOCOL_CFGEXPORT_H_ */

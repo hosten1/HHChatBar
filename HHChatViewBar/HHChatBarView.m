@@ -15,14 +15,11 @@
 #define WEAKSELF __weak __typeof(&*self)weakSelf = self;
 
 @interface HHChatBarView ()
-@property(nonatomic,strong)UIButton *leftBtn;
-@property(nonatomic,strong)UIView *leftContaintsView;
 @property(nonatomic,assign)NSInteger oldBtnTargt;
 @property(nonatomic,strong)HHChatPopupTableView *oldPopView;
 @property(nonatomic,copy)NSArray *sourcesArray;
 @property (assign,nonatomic) bool Hiddent;
 @property (assign,nonatomic) NSInteger count;
-@property (strong,nonatomic) UIView *rightSubButtonView;
 
 @end
 

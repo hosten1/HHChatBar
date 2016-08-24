@@ -1,0 +1,57 @@
+/*!
+ 
+ @header   LDGroupListModel.h
+ 
+ @abstract 群成员列表
+ 
+ @author   Created by VRV.
+ 
+ @version  0.3.0
+ 
+ */
+
+#import "LDListModel.h"
+
+/*!
+ @class LDGroupListModel
+ @descript 继承 ListModel 群列表相关处理
+ */
+@interface LDGroupListModel : LDListModel
+
+/*!
+ @method    createGroupWithInviteMembers
+ @descript  创建群聊
+ @param     需要添加的成员列表
+ @result    状态和包含新群ID的字典
+ */
+- (void)createGroupWithInviteMembers:(NSArray <LDUserModel *>*)contactList
+                          completion:(void (^)(NSError *error, NSDictionary *info))completion;
+/*!
+ @method    joinGroupWithVerifyInfo
+ @descript  申请加入群
+ @param     info 验证信息
+ @result    状态和错误码
+ */
+- (void)joinGroup:(LDGroupModel *)group
+       VerifyInfo:(NSString *)info
+       completion:(void (^)(NSError *error))completion;
+
+/*!
+ @method    dismissGroup
+ @descript  解散群
+ @param     group 群对象
+ @result    状态和错误码
+ */
+- (void)dismissGroup:(LDGroupModel *)group
+          completion:(void (^)(NSError *error))completion;
+
+/*!
+ @method    quitGroup
+ @descript  退出群
+ @param     group 群对象
+ @result    状态和错误码
+ */
+- (void)quitGroup:(LDGroupModel *)group
+       completion:(void (^)(NSError *error))completion;
+
+@end

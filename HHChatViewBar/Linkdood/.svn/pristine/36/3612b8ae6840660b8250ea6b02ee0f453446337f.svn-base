@@ -1,0 +1,23 @@
+//
+//  LDObject.m
+//  SDKClient
+//
+//  Created by xiong qing on 16/4/16.
+//  Copyright © 2016年 VRV. All rights reserved.
+//
+
+#import "LDObject.h"
+
+@implementation LDObject
+
+- (void)transformToRequest:(void **)reqData witCmd:(unsigned short)cmd{
+    
+}
+
+- (void)callbackByResponse:(void *)rspData witCmd:(unsigned short)cmd{
+    
+}
+
+
+
+@end

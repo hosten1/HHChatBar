@@ -1,0 +1,145 @@
+//
+//  LDUserModel.h
+//  SDKClient
+//  所有用户信息的基类(包括好友、陌生人、群成员、组织成员等)
+//  Created by xiong qing on 16/2/1.
+//  Copyright © 2016年 VRV. All rights reserved.
+//
+
+#import "LDItemModel.h"
+
+//好友验证方式
+typedef enum : NSInteger {
+    verify_type_refuse = 1,//不允许任何人添加
+    verify_type_validation = 2,//需要验证信息
+    notification_allow = 3,//允许任何人添加
+} verify_type;
+
+//新消息通知方式
+typedef enum : NSInteger {
+    notification_content_detail = 1,//通知详情
+    notification_content_from = 2,//通知源，隐藏内容
+    notification_content_hide = 3,//完全隐藏
+} notification_content;
+
+//新消息接收模式
+typedef enum : NSInteger {
+    notification_type_recevice = 1,//提醒
+    notification_type_badge = 2,//表示不提醒仅显示数字
+    notification_type_disable = 3,//不提醒
+} notification_type;
+
+@interface LDUserModel : LDItemModel
+
+/*!
+ @property name
+ @descript 用户名(赋值优先级:备注->昵称->豆豆号)
+ */
+@property (nonatomic,copy) NSString *name;
+
+/*!
+ @property sex
+ @descript 用户性别(0-保密<或者中性、未知性别等非男非女的性别>,1-男,2-女)
+ */
+@property (nonatomic,assign) int sex;
+
+/*!
+ @property avatar
+ @descript 用户头像(缩略头像)
+ */
+@property (nonatomic,copy) NSString *avatar;
+
+/*!
+ @property srcAvatar
+ @descript 用户头像(高清头像)
+ */
+@property (nonatomic,copy) NSString *srcAvatar;
+
+/*!
+ @property nickID
+ @descript 豆豆号
+ */
+@property (nonatomic,copy) NSString *nickID;
+
+/*!
+ @property sign
+ @descript 用户签名
+ */
+@property (nonatomic,copy) NSString *sign;
+
+/*!
+ @property birthday
+ @descript 用户生日(时间毫秒长整型值)
+ */
+@property (nonatomic,assign) int64_t birthday;
+
+/*!
+ @property area
+ @descript 用户地区
+ */
+@property (nonatomic,copy) NSString *area;
+
+/*!
+ @property  extend
+ @descript  扩展信息
+ */
+@property (nonatomic,copy) NSString *extend;
+
+/*!
+ @property phones
+ @descript 用户绑定的手机号
+ */
+@property (nonatomic,strong) NSMutableArray *phones;
+
+/*!
+ @property emails
+ @descript 用户绑定的邮箱
+ */
+@property (nonatomic,strong) NSMutableArray *emails;
+
+/*!
+ @property  verifyType
+ @descript  验证类型1:不允许任何人添加,2:需要验证信息,3:允许任何人添加 type
+ */
+@property (nonatomic,assign) verify_type verifyType;
+
+/*!
+ @property  notificationContent
+ @descript  新消息通知内容 1、通知详情 2、通知源，隐藏内容 3、完全隐藏 默认开启模式1
+ */
+@property (nonatomic,assign) notification_content notificationContent;
+
+/*!
+ @property  notification_type
+ @descript  新消息通知模式 1、为接收提醒 2、表示不提醒仅显示数字 3、为免打扰, 默认1
+ */
+@property (nonatomic,assign) notification_type notificationType;
+
+typedef void (^UserInfo)(LDUserModel *userInfo);
+/*!
+ *@method    loadUserInfo
+ *@descript  加载用户资料信息
+ *@param     空
+ *@result    空
+ */
+-(void)loadUserInfo:(UserInfo)completion;
+
+/*!
+ *@method    changeNotificationContent
+ *@descript  修改新消息通知内容
+ *@param     content    新消息通知内容
+ *@param     completion 接口回调
+ *@result    空
+ */
+-(void)changeNotificationContent:(notification_content)content completion:(void (^) (NSError *error))completion;
+
+/*!
+ *@method    changeNotificationaType
+ *@descript  修改新消息通知类型
+ *@param     type       新消息通知类型
+ *@param     completion 接口回调
+ *@result    空
+ */
+-(void)changeNotificationaType:(notification_type)type completion:(void (^) (NSError *error))completion;
+
+@end

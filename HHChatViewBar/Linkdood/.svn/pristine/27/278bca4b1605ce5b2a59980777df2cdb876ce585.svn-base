@@ -1,0 +1,124 @@
+//
+//  LDSysMessageModel.m
+//  IMSDK
+//
+//  Created by VRV on 16/1/4.
+//  Copyright © 2016年 VRV. All rights reserved.
+//
+
+#import "LDSysMsgModel.h"
+
+@interface LDSysMsgModel()
+
+/*!
+ @property remark
+ @descript 加陌生人为好友时的备注信息
+ */
+@property (nonatomic,strong) NSString *remark;
+
+/*!
+ @property isGroupAgree
+ @descript 处理结果 1：忽略 2：同意 3： 拒绝  4:拒绝并不允许再次请求
+ */
+@property (nonatomic,assign) OperGroup isGroupAgree;
+
+@end
+
+@implementation LDSysMsgModel
+
+-(instancetype)initWithID:(int64_t)itemID{
+    if (self = [super init]) {
+        self.ID = itemID;
+    }
+    return self;
+}
+
++ (instancetype)modelWithStruct:(void *)structural forStructType:(struct_type)type{
+    imsdk::resp_SysMsg *sysMsg = (imsdk::resp_SysMsg*)structural;
+    LDSysMsgModel *sysMessage = [[LDSysMsgModel alloc] initWithID:sysMsg->msgID];
+    [sysMessage setTimestamp:sysMsg->time];
+    [sysMessage setUserID:sysMsg->userID];
+    [sysMessage setGroupID:sysMsg->groupID];
+    [sysMessage setMsgType:(ReadType)sysMsg->msgType];
+    [sysMessage setIsResponse:sysMsg->isResponse];
+    [sysMessage setIsRead:sysMsg->isRead];
+    [sysMessage setOpType:sysMsg->opType];
+    [sysMessage setSubType:sysMsg->subType];
+    [sysMessage setUserName:[NSString stringWithCString:sysMsg->name.c_str() encoding:NSUTF8StringEncoding]];
+    [sysMessage setGroupName:[NSString stringWithCString:sysMsg->groupName.c_str() encoding:NSUTF8StringEncoding]];
+    [sysMessage setPortraitUrl:[NSString stringWithCString:sysMsg->portraitUrl.c_str() encoding:NSUTF8StringEncoding]];
+    [sysMessage setAddInfo:[NSString stringWithCString:sysMsg->addInfo.c_str() encoding:NSUTF8StringEncoding]];
+    return sysMessage;
+}
+
+-(void)verifyBuddy:(OperBuddy)verify
+      refuseReason:(NSString *)reason
+            remark:(NSString *)remark
+        completion:(void (^) (NSError *error))completion{
+    
+    self.isBuddyAgree = verify;
+    self.refuseReason = reason?reason:nil;
+    self.remark = remark?remark:nil;
+    
+    [SDKClient sendRequestToSDK:imsdk::logic_cmd_addBuddyResponse postData:self completion:^(void *response) {
+        imsdk::resp_commonResult *result = (imsdk::resp_commonResult *)response;
+        NSError *error = [NSError errorWithResponse:result->code];
+        if (completion) {
+            MainQue(completion(error);)
+        }
+    }];
+}
+
+-(void)verifyGroup:(OperGroup)verify
+             refuseReason:(NSString *)reason
+               completion:(void (^) (NSError *error))completion{
+    
+    self.isGroupAgree = verify;
+    self.refuseReason = reason?reason:nil;
+    
+    [SDKClient sendRequestToSDK:imsdk::logic_cmd_groupVerifyResp postData:self completion:^(void *response) {
+        imsdk::resp_commonResult *result = (imsdk::resp_commonResult *)response;
+        NSError *error = [NSError errorWithResponse:result->code];
+        if (completion) {
+            MainQue(completion(error);)
+        }
+    }];
+}
+
+
+
+-(void)transformToRequest:(void **)reqData witCmd:(unsigned short)cmd
+{
+    if (cmd == imsdk::logic_cmd_addBuddyResponse) {
+        imsdk::req_addBuddyResponse *req = new imsdk::req_addBuddyResponse();
+        req->userID = self.userID;
+        if (self.refuseReason) {
+            std::string refuseReason = [self.refuseReason UTF8String];
+            req->refuseReason = refuseReason;
+        }
+        if (self.remark) {
+            std::string remark = [self.remark UTF8String];
+            req->remark = remark;
+        }
+        req->isAgree = self.isBuddyAgree;
+        req->reqVerifyboxID = self.ID;
+        *reqData = req;
+        return;
+    }
+    
+    if (cmd == imsdk::logic_cmd_groupVerifyResp) {
+        imsdk::req_groupVerifyRespons *req = new imsdk::req_groupVerifyRespons();
+        req->reqID = self.ID;
+        req->groupID = self.groupID;
+        req->respResult = self.isGroupAgree;
+        if (self.refuseReason) {
+            std::string refuseReason = [self.refuseReason UTF8String];
+            req->refuseReason = refuseReason;
+        }
+        *reqData = req;
+        return;
+    }
+
+}
+
+@end

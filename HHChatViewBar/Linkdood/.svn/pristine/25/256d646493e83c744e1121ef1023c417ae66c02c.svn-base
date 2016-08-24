@@ -1,0 +1,54 @@
+//
+//  LDPrivacyModel.h
+//  SDKClient
+//
+//  Created by ballsnow on 16/5/4.
+//  Copyright © 2016年 VRV. All rights reserved.
+//
+
+@interface LDPrivacyModel : LDItemModel
+
+/*!
+ *@method    initWithKey
+ *@descript  必须通过密码初始化对象
+ *@param     password 密码
+ *@result    空
+ */
+- (instancetype)initWithKey:(NSString*)password;
+
+/*!
+ *@method    addHiddenID
+ *@descript  添加隐藏的好友或群组
+ *@param     items ID数组
+ *@result    空
+ */
+-(void)addHiddenID:(NSArray<NSNumber *>*)items
+          completion:(void (^) (NSError *error))completion;
+
+/*!
+ *@method    removeHiddenID
+ *@descript  删除隐藏的好友或群组
+ *@param     items ID数组
+ *@result    空
+ */
+-(void)removeHiddenID:(NSArray<NSNumber *>*)items
+             completion:(void (^) (NSError *error))completion;
+
+/*!
+ *@method    queryHiddenIDs
+ *@descript  获取被隐藏的好友
+ *@param
+ *@result
+ */
+-(void)queryHiddenIDs:(void (^) (NSError *error,NSArray *items))completion;
+
+/*!
+ *@method    resetHiddenPassword
+ *@descript  修改隐藏好友密码
+ *@param     
+ *@result    空
+ */
+-(void)resetHiddenPassword:(NSString *)newPwd
+                completion:(void (^) (NSError *error))completion;
+
+@end

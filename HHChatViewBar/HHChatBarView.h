@@ -80,5 +80,6 @@
  */
 
 -(instancetype)initWithDictionary:(NSDictionary*)resourcesDic;
+@property (strong,nonatomic) UIColor *subViewBackgroundColor;
 -(void)setupSubviewItems;
 @end

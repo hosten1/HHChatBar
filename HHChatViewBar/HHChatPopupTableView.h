@@ -19,5 +19,6 @@ typedef void(^indexCallBack)(NSIndexPath *index);
 @property (assign,nonatomic) CGFloat cellHeight;
 @property (copy,nonatomic) NSArray *titleArray;
 @property (assign,nonatomic) NSInteger indexValue;
+@property (strong,nonatomic) UIColor *cellColor;
 @property (copy,nonatomic) indexCallBack tableViewCallBack;
 @end

@@ -13,7 +13,7 @@
 #define KViewHeight  self.frame.size.height
 #define KCellHeight 30.0f
 #define WEAKSELF __weak __typeof(&*self)weakSelf = self;
-
+#define Kmargin 2//所有控件之间的距离
 @interface HHChatBarView ()
 @property(nonatomic,assign)NSInteger oldBtnTargt;
 @property(nonatomic,strong)HHChatPopupTableView *oldPopView;
@@ -21,6 +21,7 @@
 @property (assign,nonatomic) bool Hiddent;
 @property (assign,nonatomic) NSInteger count;
 
+@property (copy,nonatomic) NSArray *subMenuTitleArrary;
 @end
 
 @implementation HHChatBarView
@@ -38,19 +39,22 @@
 #pragma mark  -- 父视图改变时 改变子视图
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.leftContaintsView.frame = CGRectMake(0, 1, 45, KViewHeight-1);
-    self.leftBtn.frame = CGRectMake(0,0, 30, 30);
+    self.leftContaintsView.frame = CGRectMake(Kmargin, Kmargin, 45, KViewHeight-2);
+    self.leftBtn.frame = CGRectMake(0,0, 20, 20);
     self.leftBtn.center = self.leftContaintsView.center;
     [self layoutRightSubButton];
 }
 -(void)layoutRightSubButton{
+    
+     CGFloat margin = Kmargin;
+    
     NSArray *subArray = self.rightSubButtonView.subviews;
-    CGFloat contentViewX = CGRectGetMaxX(self.leftContaintsView.frame)+6;
+    CGFloat contentViewX = CGRectGetMaxX(self.leftContaintsView.frame)+margin;
     CGFloat contetViewWid = kScreenSize.width - contentViewX-6;
-    self.rightSubButtonView.frame = CGRectMake(contentViewX, 1, contetViewWid, self.frame.size.height-10);
+    self.rightSubButtonView.frame = CGRectMake(contentViewX, margin-1, contetViewWid, self.frame.size.height-10);
     NSInteger count = self.count;
     
-    CGFloat margin = 2;
+   
     
     CGFloat itemWidth = (contetViewWid-margin)/count;
     CGFloat itemY = 1;
@@ -68,6 +72,16 @@
 -(void)setResourseDictionary:(NSDictionary *)resourseDictionary{
     _resourseDictionary = resourseDictionary;
     self.sourcesArray = resourseDictionary[@"menu"];
+}
+-(void)setSubViewBackgroundColor:(UIColor *)subViewBackgroundColor{
+    _subViewBackgroundColor = subViewBackgroundColor;
+    self.leftContaintsView.backgroundColor = subViewBackgroundColor;
+    for (UIView *svubview in self.rightSubButtonView.subviews) {
+        if ([svubview isKindOfClass:[UIButton class]]) {
+            UIButton *btn = (UIButton*)svubview;
+            btn.backgroundColor = subViewBackgroundColor;
+        }
+    }
 }
 //初始化左边的按钮
 -(void)initLeftBarButton{
@@ -107,13 +121,26 @@
         if (!title) {
             title = @"帮助";
         }
+        NSArray *titileArray = nil;
+        if (self.ChatDelegate && [self.ChatDelegate respondsToSelector:@selector(chatBar:subPopViewTitleOfRowWithIndexPath:)]) {
+            titileArray = [self.ChatDelegate  chatBar:self subPopViewTitleOfRowWithIndexPath:[NSIndexPath indexPathForRow:0 inSection:i]];
+        }
         item = [UIButton buttonWithType:UIButtonTypeCustom];
+        item.titleLabel.font =  [UIFont systemFontOfSize:15];
         [item setTitle:title forState:UIControlStateNormal];
         [item setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
         [rightBtnView addSubview:item];
+        if (titileArray.count > 0) {//如果有子菜单 则显示菜单图标
+            [item setImage:[UIImage imageNamed:@"bubble_menu"] forState:UIControlStateNormal];
+            
+        }
         [item addTarget:self action:@selector(buttonClickWithChatItemView:) forControlEvents:UIControlEventTouchUpInside];
         item.tag = 2016819+i;
-    
+        if (self.subViewBackgroundColor) {
+            [item setBackgroundColor:self.subViewBackgroundColor];
+
+        }
+        
     }
 }
 -(void)buttonClickWithChatItemView:(UIButton*)sender{
@@ -136,13 +163,13 @@
         if (self.count > 3 || self.count == 1) {
             width = 100;
         }else{
-            width = sender.frame.size.width-10;
+            width = sender.frame.size.width;
         }
         CGFloat x;
         if (self.count == 4||self.count == 5||self.count == 6) {
-            x = sender.frame.origin.x+2-30;
+            x = sender.frame.origin.x+2-10;
         }else{
-            x = sender.frame.origin.x+2;
+            x = sender.frame.origin.x+40;
         }
         
         CGFloat y = kScreenSize.height-sender.frame.size.height-10 - height;
@@ -161,6 +188,7 @@
                 popView.tableViewCallBack = ^(NSIndexPath *index){
                     //                 NSLog(@"sss  %ld  section:%ld",index.row,index.section);
                     if (weakSelf.ChatDelegate && [weakSelf.ChatDelegate respondsToSelector:@selector(chatBar:didSelectIndex:)]) {
+                        [weakSelf.oldPopView hideView];
                         [weakSelf.ChatDelegate chatBar:weakSelf didSelectIndex:index];
                     }
                 };
@@ -173,6 +201,7 @@
                     self.oldPopView.tableViewCallBack = ^(NSIndexPath *index){
                         //                     NSLog(@"aaa  %ld  section:%ld",index.row,index.section);
                         if (weakSelf.ChatDelegate && [weakSelf.ChatDelegate respondsToSelector:@selector(chatBar:didSelectIndex:)]) {
+                            [weakSelf.oldPopView hideView];
                             [weakSelf.ChatDelegate chatBar:weakSelf didSelectIndex:index];
                         }
                     };
@@ -190,6 +219,7 @@
             popView.tableViewCallBack = ^(NSIndexPath *index){
                 //            NSLog(@"ddd  %ld  section:%ld",index.row,index.section);
                 if (weakSelf.ChatDelegate && [weakSelf.ChatDelegate respondsToSelector:@selector(chatBar:didSelectIndex:)]) {
+                    [weakSelf.oldPopView hideView];
                     [weakSelf.ChatDelegate chatBar:weakSelf didSelectIndex:index];
                 }
             };
@@ -197,7 +227,8 @@
         
     }
     
-    
+    self.oldPopView.cellColor = sender.backgroundColor;
+    self.oldPopView.backgroundColor = self.backgroundColor;
 }
 
 

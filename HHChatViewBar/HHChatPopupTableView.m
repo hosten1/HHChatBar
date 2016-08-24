@@ -40,10 +40,10 @@
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return _titleArray.count;
+    return 1;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 1;
+    return _titleArray.count;
 }
 
 #pragma mark   ----tableDataSource
@@ -52,26 +52,28 @@
     LDChatBarCellModel *temp = [[LDChatBarCellModel alloc]init];
     temp.cellname =self.titleArray[indexPath.row];
     cell.mode = temp;
+    cell.backgroundColor = _cellColor;
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     return 1;
 }
--(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(10, 0, self.tableView.bounds.size.width-10, 1)];
-    lineView.backgroundColor = [UIColor colorWithRed:0.790 green:0.802 blue:0.838 alpha:1.000];
-    if (section == self.titleArray.count-1) {
-        return nil;
-    }
-    return lineView;
-}
+//-(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+//    UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(10, 0, self.tableView.bounds.size.width-10, 1)];
+//    lineView.backgroundColor = [UIColor colorWithRed:0.790 green:0.802 blue:0.838 alpha:1.000];
+//    if (section == self.titleArray.count-1) {
+//        return nil;
+//    }
+//    return lineView;
+//}
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return self.cellHeight;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (_tableViewCallBack) {
-        _tableViewCallBack([NSIndexPath indexPathForRow:indexPath.section inSection:self.indexValue]);
+        NSIndexPath *index = [NSIndexPath indexPathForRow:indexPath.row inSection:self.indexValue];
+        _tableViewCallBack(index);
     }
 }
 -(Boolean)hideView{
